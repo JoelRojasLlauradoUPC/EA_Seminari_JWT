@@ -1,7 +1,8 @@
 import express from 'express';
-import { login, logout, refreshToken } from '../controllers/auth';
+import { login, logout, refreshToken, getMe } from '../controllers/auth';
 import Joi from 'joi';
 import { ValidateJoi } from '../middleware/Joi';
+import { authenticateToken } from '../middleware/auth';
 
 const router = express.Router();
 
@@ -67,6 +68,20 @@ router.post('/refresh', refreshToken);
  *       200:
  *         description: Logout exitoso
  */
-router.post('/logout', logout);
+/**
+ * @openapi
+ * /auth/me:
+ *   get:
+ *     summary: Obtiene el perfil del usuario autenticado
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Perfil del usuario obtenido con éxito
+ *       401:
+ *         description: No autorizado
+ */
+router.get('/me', authenticateToken, getMe);
 
 export default router;

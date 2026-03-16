@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { verifyAccessToken, JwtPayload } from "../utils/jwt";
+import { verifyAccessToken } from "../utils/jwt";
+import { IJwtPayload } from "../models/JwtPayload";
 
 
 export interface AuthRequest extends Request {
-    user?: JwtPayload;
+  user?: IJwtPayload;
 }
 
 export const authenticateToken = (
@@ -23,7 +24,7 @@ export const authenticateToken = (
 
   try {
     const decoded = verifyAccessToken(token); // Verifica el access token
-    req.user = decoded; 
+    req.user = decoded;
     next(); // Si todo esta bien, pasa a la siguiente ruta
   } catch (err: any) {
     if (err instanceof jwt.TokenExpiredError) {
