@@ -30,4 +30,30 @@ const deleteUsuario = async (usuarioId: string): Promise<IUsuarioModel | null> =
     return await Usuario.findByIdAndDelete(usuarioId);
 };
 
-export default { createUsuario, getUsuario, getAllUsuarios, updateUsuario, deleteUsuario };
+const toggleUserRole = async (usuarioId: string, role: string): Promise<IUsuarioModel | null> => {
+    const usuario = await Usuario.findById(usuarioId);
+    if (!usuario) {
+        return null;
+    }
+
+    const normalizedRole = role.trim().toLowerCase();
+    if (!normalizedRole) {
+        return null;
+    }
+
+    const roles = Array.isArray(usuario.roles) ? [...usuario.roles] : ['user'];
+    const hasRole = roles.includes(normalizedRole);
+
+    if (hasRole) {
+        usuario.roles = roles.filter((existingRole) => existingRole !== normalizedRole);
+        if (usuario.roles.length === 0) {
+            usuario.roles = ['user'];
+        }
+    } else {
+        usuario.roles = [...new Set([...roles, normalizedRole])];
+    }
+
+    return await usuario.save();
+};
+
+export default { createUsuario, getUsuario, getAllUsuarios, updateUsuario, deleteUsuario, toggleUserRole };

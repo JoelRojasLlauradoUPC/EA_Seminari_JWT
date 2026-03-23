@@ -3,6 +3,7 @@ import controller from '../controllers/Usuario';
 import { Schemas, ValidateJoi } from '../middleware/Joi';
 
 import { authenticateToken } from '../middleware/auth';
+import { authorizeRoles } from '../middleware/roles';
 
 const router = express.Router();
 
@@ -112,8 +113,8 @@ router.get('/:usuarioId',authenticateToken ,controller.readUsuario);
  *       200:
  *         description: OK
  */
-router.get('/',authenticateToken, controller.readAll);
-
+router.get('/', authenticateToken, authorizeRoles('admin'), controller.readAll);
+//que només un admin pot veure tots els usuaris
 /**
  * @openapi
  * /usuarios/{usuarioId}:
@@ -143,7 +144,10 @@ router.get('/',authenticateToken, controller.readAll);
  *       422:
  *         description: Validación fallida (Joi)
  */
-router.put('/:usuarioId',authenticateToken, ValidateJoi(Schemas.usuario.update), controller.updateUsuario);
+router.put('/:usuarioId', authenticateToken, authorizeRoles('admin', 'user'), ValidateJoi(Schemas.usuario.update), controller.updateUsuario);
+//que només un admin pot actualitzar qualsevol usuari (un user pot actualitzarse a sí mateix)
+
+router.patch('/:usuarioId/roles/:role', authenticateToken, authorizeRoles('admin'), controller.toggleUserRole);
 
 /**
  * @openapi
@@ -166,6 +170,6 @@ router.put('/:usuarioId',authenticateToken, ValidateJoi(Schemas.usuario.update),
  *       404:
  *         description: No encontrado
  */
-router.delete('/:usuarioId',authenticateToken, controller.deleteUsuario);
-
+router.delete('/:usuarioId', authenticateToken, authorizeRoles('admin', 'user'), controller.deleteUsuario);
+//que només un admin pot eliminar qualsevol usuari (un user pot eliminarse a sí mateix)
 export default router;

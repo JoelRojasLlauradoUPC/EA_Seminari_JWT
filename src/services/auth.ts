@@ -14,17 +14,21 @@ export const validateUserCredentials = async (email: string, password: string) =
 };
 
 export const getTokens = (usuario: any) => {
+    const roles = Array.isArray(usuario.roles) && usuario.roles.length > 0 ? usuario.roles : ['user'];
+
     const accessToken = generateAccessToken(
         String(usuario._id),
         usuario.name,
         usuario.email,
-        usuario.organizacion as mongoose.Types.ObjectId
-    );
+        usuario.organizacion as mongoose.Types.ObjectId,
+        roles
+    ); //passsar rols
     const refreshToken = generateRefreshToken(
         String(usuario._id),
         usuario.name,
         usuario.email,
-        usuario.organizacion as mongoose.Types.ObjectId
+        usuario.organizacion as mongoose.Types.ObjectId,
+        roles
     );
 
     return { accessToken, refreshToken };

@@ -1,6 +1,8 @@
 import express from 'express';
 import controller from '../controllers/Organizacion';
 import { Schemas, ValidateJoi } from '../middleware/Joi';
+import { authenticateToken } from '../middleware/auth';
+import { authorizeRoles } from '../middleware/roles';
 
 const router = express.Router();
 
@@ -56,8 +58,8 @@ const router = express.Router();
  *       422:
  *         description: Validación fallida (Joi)
  */
-router.post('/', ValidateJoi(Schemas.organizacion.create), controller.createOrganizacion);
-
+router.post('/', authenticateToken, authorizeRoles('admin'), ValidateJoi(Schemas.organizacion.create), controller.createOrganizacion);
+//q només pugui un admin crear organitzacions
 /**
  * @openapi
  * /organizaciones/{organizacionId}:
@@ -132,8 +134,8 @@ router.get('/', controller.readAll);
  *       422:
  *         description: Validación fallida (Joi)
  */
-router.put('/:organizacionId', ValidateJoi(Schemas.organizacion.update), controller.updateOrganizacion);
-
+router.put('/:organizacionId', authenticateToken, authorizeRoles('admin'), ValidateJoi(Schemas.organizacion.update), controller.updateOrganizacion);
+//que només pugui un admin actualitzar organitzacions
 /**
  * @openapi
  * /organizaciones/{organizacionId}:
@@ -153,6 +155,6 @@ router.put('/:organizacionId', ValidateJoi(Schemas.organizacion.update), control
  *       404:
  *         description: No encontrado
  */
-router.delete('/:organizacionId', controller.deleteOrganizacion);
-
+router.delete('/:organizacionId', authenticateToken, authorizeRoles('admin'), controller.deleteOrganizacion);
+//que només pugui un admin eliminar organitzacions
 export default router;
