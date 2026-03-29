@@ -89,3 +89,4 @@ JWT_REFRESH_EXPIRES_IN="7d"
 S'ha utilitzat Co Pilot per fer la separació inicial de components i funcionalitats a angular i x gestionar l'aspecte visual dels HTML.
 
 ## Vídeo amb la DEMO
+https://youtu.be/r4PcynMJZy8
