@@ -83,7 +83,7 @@ router.post('/', authenticateToken, authorizeRoles('admin'), ValidateJoi(Schemas
  *       404:
  *         description: No encontrado
  */
-router.get('/:organizacionId', controller.readOrganizacion);
+router.get('/:organizacionId', authenticateToken, controller.readOrganizacion);
 
 /**
  * @openapi
@@ -101,7 +101,7 @@ router.get('/:organizacionId', controller.readOrganizacion);
  *               items:
  *                 $ref: '#/components/schemas/Organizacion'
  */
-router.get('/', controller.readAll);
+router.get('/', authenticateToken, controller.readAll);
 
 /**
  * @openapi

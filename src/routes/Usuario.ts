@@ -147,6 +147,29 @@ router.get('/', authenticateToken, authorizeRoles('admin'), controller.readAll);
 router.put('/:usuarioId', authenticateToken, authorizeRoles('admin', 'user'), ValidateJoi(Schemas.usuario.update), controller.updateUsuario);
 //que només un admin pot actualitzar qualsevol usuari (un user pot actualitzarse a sí mateix)
 
+/**
+ * @openapi
+ * /usuarios/removeOrganization/{id}:
+ *   put:
+ *     summary: Quita la organización de un usuario por ID
+ *     tags: [Usuarios]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ObjectId del usuario
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: No encontrado
+ */
+router.put('/removeOrganization/:id', authenticateToken, authorizeRoles('admin'), controller.removeOrganization);
+
 router.patch('/:usuarioId/roles/:role', authenticateToken, authorizeRoles('admin'), controller.toggleUserRole);
 
 /**

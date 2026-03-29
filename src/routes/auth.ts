@@ -68,6 +68,8 @@ router.post('/refresh', refreshToken);
  *       200:
  *         description: Logout exitoso
  */
+router.post('/logout', logout);
+
 /**
  * @openapi
  * /auth/me:

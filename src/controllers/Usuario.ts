@@ -97,4 +97,15 @@ const toggleUserRole = async (req: AuthRequest, res: Response, next: NextFunctio
     }
 };
 
-export default { createUsuario, readUsuario, readAll, updateUsuario, deleteUsuario, toggleUserRole };
+const removeOrganization = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    const usuarioId = req.params.id;
+
+    try {
+        const updatedUsuario = await UsuarioService.removeUserOrganization(usuarioId);
+        return updatedUsuario ? res.status(200).json(updatedUsuario) : res.status(404).json({ message: 'not found' });
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
+};
+
+export default { createUsuario, readUsuario, readAll, updateUsuario, deleteUsuario, toggleUserRole, removeOrganization };

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import OrganizacionService from '../services/Organizacion';
+import { AuthRequest } from '../middleware/auth';
 
 const createOrganizacion = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -11,18 +12,24 @@ const createOrganizacion = async (req: Request, res: Response, next: NextFunctio
     }
 };
 
-const readOrganizacion = async (req: Request, res: Response, next: NextFunction) => {
+const readOrganizacion = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        const organizacion = await OrganizacionService.getOrganizacion(req.params.organizacionId);
+        const isAdmin = req.user?.roles.includes('admin');
+        const organizacion = isAdmin 
+            ? await OrganizacionService.getOrganizacionWithUsuarios(req.params.organizacionId)
+            : await OrganizacionService.getOrganizacion(req.params.organizacionId);
         return organizacion ? res.status(200).json(organizacion) : res.status(404).json({ message: 'not found' });
     } catch (error) {
         return res.status(500).json({ error });
     }
 };
 
-const readAll = async (req: Request, res: Response, next: NextFunction) => {
+const readAll = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        const organizaciones = await OrganizacionService.getAllOrganizaciones();
+        const isAdmin = req.user?.roles.includes('admin');
+        const organizaciones = isAdmin 
+            ? await OrganizacionService.getAllOrganizacionesWithUsuarios()
+            : await OrganizacionService.getAllOrganizaciones();
         return res.status(200).json(organizaciones);
     } catch (error) {
         return res.status(500).json({ error });

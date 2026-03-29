@@ -56,4 +56,8 @@ const toggleUserRole = async (usuarioId: string, role: string): Promise<IUsuario
     return await usuario.save();
 };
 
-export default { createUsuario, getUsuario, getAllUsuarios, updateUsuario, deleteUsuario, toggleUserRole };
+const removeUserOrganization = async (usuarioId: string): Promise<IUsuarioModel | null> => {
+    return await Usuario.findByIdAndUpdate(usuarioId, { $unset: { organizacion: 1 } }, { new: true });
+};
+
+export default { createUsuario, getUsuario, getAllUsuarios, updateUsuario, deleteUsuario, toggleUserRole, removeUserOrganization };
