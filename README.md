@@ -80,3 +80,12 @@ JWT_REFRESH_EXPIRES_IN="7d"
 
 ---
 ¡Explora el código y fíjate en cómo la separación de servicios y controladores hace que todo sea más fácil de testear y mantener! 
+
+## Materials Consultats
+- Els disponibles a Atenea.
+- Els publicats pel grup que ha presentat el seminari.
+
+## Detall d'ús de la IA generativa
+S'ha utilitzat Co Pilot per fer la separació inicial de components i funcionalitats a angular i x gestionar l'aspecte visual dels HTML.
+
+## Vídeo amb la DEMO

@@ -18,7 +18,7 @@ const UsuarioSchema: Schema = new Schema(
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
         organizacion: { type: Schema.Types.ObjectId, required: true, ref: 'Organizacion' },
-        roles: { type: [String], default: ['user'] } //rols a usuaris
+        roles: { type: [String], default: ['user'] } //x defecte seras user
     },
     {
         timestamps: true,
